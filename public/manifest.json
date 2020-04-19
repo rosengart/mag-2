@@ -1,0 +1,17 @@
+{
+  "name": "Shirtless",
+  "short_name": "Shirtless",
+  "theme_color": "#880e4f",
+  "background_color": "#fff",
+  "display": "standalone",
+  "scope": "/",
+  "start_url": "/",
+  "icons": [
+    {
+      "src": "https://d3ekcj290tyqfc.cloudfront.net/icon/file/421/1490318485/emoji/Lifeguard%20-%20Flirtmoji.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "splash_pages": null
+}
