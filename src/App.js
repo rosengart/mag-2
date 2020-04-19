@@ -55,7 +55,7 @@ export default class App extends React.Component {
 		this.state = {
 			user: {},
 			signedIn: null,
-			navigationOpen: false,
+			navigationOpen: true,
 		}
 	}
 
