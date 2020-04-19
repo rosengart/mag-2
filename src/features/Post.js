@@ -51,11 +51,7 @@ class Picture extends React.Component {
 
   render() {
     const { reference, url } = this.state;
-    return (
-      <div>
-        <img src={url} alt={reference} />
-      </div>
-    );
+    return <div>{url && <img src={url} alt={reference} />}</div>;
   }
 }
 
@@ -77,7 +73,7 @@ function Tag(props) {
 // Post
 export default function Post(props) {
   const classes = useStyles();
-  const { id, media, tags } = props;
+  const { media, tags } = props;
 
   return (
     <div className={classes.post}>

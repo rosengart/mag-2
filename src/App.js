@@ -7,7 +7,7 @@ import {
 } from "react-router-dom";
 
 import { ThemeProvider } from "@material-ui/styles";
-import { createMuiTheme, withStyles } from "@material-ui/core/styles";
+import { createMuiTheme } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import pink from "@material-ui/core/colors/pink";
 import blue from "@material-ui/core/colors/blue";
@@ -59,8 +59,8 @@ export default class App extends React.Component {
     super();
     this.state = {
       user: {},
-      signedIn: false,
-      navigationOpen: true
+      signedIn: null,
+      navigationOpen: false
     };
   }
 
@@ -95,7 +95,7 @@ export default class App extends React.Component {
             {signedIn && <Appbar authProvider={auth} />}
             {signedIn && <Navigation open={navigationOpen} />}
 
-            {!signedIn && <Login authProvider={auth} />}
+            {signedIn === false && <Login authProvider={auth} />}
 
             <Switch>
               <Route exact path="/" />

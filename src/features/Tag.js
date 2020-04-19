@@ -2,6 +2,7 @@ import React from "react";
 
 import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
+import pink from "@material-ui/core/colors/pink";
 
 import Post from "./Post";
 
@@ -9,9 +10,13 @@ import firebase from "./../firebase";
 const db = firebase.firestore();
 
 const useStyles = makeStyles(theme => ({
+  tag: {
+    paddingBottom: theme.spacing(4)
+  },
   tagTitle: {
-    padding: theme.spacing(2, 2, 3),
-    fontSize: 24
+    padding: theme.spacing(2, 2, 0),
+    fontSize: 44,
+    color: pink[600]
   }
 }));
 
@@ -21,65 +26,41 @@ class Gallery extends React.Component {
     this.state = {
       tag: props.tag,
       posts: [],
-      lastPostId: 0
+      lastVisibleDoc: null
     };
   }
 
-  loadPosts() {
-    const lastPostId = this.state.lastPostId;
+  getPosts() {
+    const tag = this.state.tag;
+    const posts = this.state.posts;
+    let lastVisibleDoc = this.state.lastVisibleDoc;
 
     return db
       .collection("posts")
       .where("tags", "array-contains", tag)
-      .startAfter(lastPostId)
-      .limit(15)
-      .get();
-  }
-
-  componentDidUpdate(props) {
-    const tag = props.tag;
-    const posts = this.state.posts;
-    let lastPostId = this.state.lastPostId;
-
-    db.collection("posts")
-      .where("tags", "array-contains", tag)
-      .limit(15)
+      .orderBy("tumblr-id")
+      .startAfter(lastVisibleDoc)
+      .limit(5)
       .get()
       .then(snapshot => {
         snapshot.forEach(post => {
           const postData = post.data();
           postData.id = post.id;
-          lastPostId = post.id;
+          lastVisibleDoc = post;
 
           posts.push(postData);
         });
 
         this.setState({
-          tag: tag,
           posts: posts,
-          lastPostId: lastPostId
+          lastVisibleDoc: lastVisibleDoc
         });
       });
   }
 
-  handleShowMore() {
-    this.loadPosts().then(snapshot => {
-      const posts = this.state.posts;
-      let lastPostId = null;
-
-      snapshot.forEach(post => {
-        const postData = post.data();
-        postData.id = post.id;
-        lastPostId = post.id;
-
-        posts.push(postData);
-      });
-
-      this.setState({
-        posts: posts,
-        lastPostId: lastPostId
-      });
-    });
+  componentDidMount() {
+    this.setState({ tag: this.props.tag });
+    this.getPosts();
   }
 
   render(props) {
@@ -90,9 +71,17 @@ class Gallery extends React.Component {
         {posts.map(post => (
           <Post key={post.id} {...post} />
         ))}
-        <div style={{ textAlign: "center" }}>
-          <Button onClick={this.handleShowMore}>Mostrar mais</Button>
-        </div>
+        {posts && (
+          <div style={{ textAlign: "center" }}>
+            <Button
+              variant="outlined"
+              color="primary"
+              onClick={() => this.getPosts()}
+            >
+              Mostrar mais
+            </Button>
+          </div>
+        )}
       </div>
     );
   }
@@ -103,7 +92,7 @@ export default function Tag(props) {
   const tag = props.match.params.tag.replace(/-/g, " ");
 
   return (
-    <div>
+    <div className={classes.tag}>
       <div className={classes.tagTitle}>{tag}</div>
       <Gallery tag={tag} />
     </div>

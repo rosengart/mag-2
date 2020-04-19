@@ -58,7 +58,7 @@ function LoginDialog(props) {
         />
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleSubmit} color="primary">
+        <Button onClick={() => handleSubmit()} color="primary">
           Entrar
         </Button>
       </DialogActions>
