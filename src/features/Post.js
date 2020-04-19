@@ -65,10 +65,10 @@ function Tag(props) {
 // Post
 export default function Post(props) {
 	const classes = useStyles()
-	const { media, tags } = props
+	const { id, media, tags } = props
 
 	return (
-		<div className={classes.post}>
+		<div className={classes.post} data-id={id}>
 			<div className={classes.pictures}>
 				{media && media.map(picture => <Picture key={picture} reference={picture} />)}
 			</div>

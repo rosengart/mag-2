@@ -1,130 +1,129 @@
-import React from "react";
+import React from "react"
 
-import { makeStyles } from "@material-ui/core/styles";
-import Paper from "@material-ui/core/Paper";
-import Fab from "@material-ui/core/Fab";
-import Drawer from "@material-ui/core/Drawer";
-import BottomNavigation from "@material-ui/core/BottomNavigation";
-import BottomNavigationAction from "@material-ui/core/BottomNavigationAction";
-import TagIcon from "@material-ui/icons/LocalOffer";
+import { makeStyles } from "@material-ui/core/styles"
+import Paper from "@material-ui/core/Paper"
+import Fab from "@material-ui/core/Fab"
+import Drawer from "@material-ui/core/Drawer"
+import BottomNavigation from "@material-ui/core/BottomNavigation"
+import BottomNavigationAction from "@material-ui/core/BottomNavigationAction"
+import TagIcon from "@material-ui/icons/LocalOffer"
 
-import Section from "./Section";
-import firebase from "./../firebase";
-const db = firebase.firestore();
+import Section from "./Section"
+import firebase from "./../firebase"
+const db = firebase.firestore()
 
 const useStyles = makeStyles(theme => ({
-  fab: {
-    position: "fixed",
-    bottom: theme.spacing(2),
-    right: theme.spacing(2)
-  }
-}));
+	fab: {
+		position: "fixed",
+		bottom: theme.spacing(2),
+		right: theme.spacing(2),
+	},
+}))
 
 function Start(props) {
-  const classes = useStyles();
+	const classes = useStyles()
 
-  return (
-    <Fab color="primary" className={classes.fab} onClick={props.onClick}>
-      <TagIcon />
-    </Fab>
-  );
+	return (
+		<Fab color="primary" className={classes.fab} onClick={props.onClick}>
+			<TagIcon />
+		</Fab>
+	)
 }
 
 export default class Navigation extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      navigation: [],
-      sections: {},
-      drawerOpen: props.open || false,
-      activeSection: null
-    };
-  }
+	constructor(props) {
+		super(props)
+		this.state = {
+			navigation: [],
+			sections: {},
+			drawerOpen: props.open || false,
+			activeSection: null,
+		}
+	}
 
-  componentDidMount() {
-    const navigation = [];
-    const sections = {};
-    db.collection("navigation")
-      .get()
-      .then(snapshot => {
-        snapshot.forEach(section => {
-          const sectionData = section.data();
-          const sectionId = section.id;
+	componentDidMount() {
+		db.collection("navigation").onSnapshot(snapshot => {
+			const navigation = []
+			const sections = {}
 
-          navigation.push({
-            id: sectionId,
-            title: sectionData.title,
-            icon: sectionData.icon,
-            order: sectionData.order
-          });
+			snapshot.forEach(section => {
+				const sectionData = section.data()
+				const sectionId = section.id
 
-          sections[sectionId] = sectionData;
-        });
+				navigation.push({
+					id: sectionId,
+					title: sectionData.title,
+					icon: sectionData.icon,
+					order: sectionData.order,
+				})
 
-        navigation.sort((a, b) => (a.order > b.order ? 1 : -1));
+				sections[sectionId] = sectionData
+			})
 
-        this.setState({
-          navigation: navigation,
-          sections: sections,
-          activeSection: navigation[0].id
-        });
-      });
-  }
+			navigation.sort((a, b) => (a.order > b.order ? 1 : -1))
 
-  handleDrawer(newValue) {
-    this.setState({ drawerOpen: newValue });
-  }
+			this.setState({
+				navigation: navigation,
+				sections: sections,
+				activeSection: navigation[0].id,
+			})
+		})
+	}
 
-  handleSectionChange(event, newValue) {
-    this.setState({ activeSection: newValue });
-  }
+	handleDrawer(newValue) {
+		this.setState({ drawerOpen: newValue })
+	}
 
-  render() {
-    const { navigation, sections, drawerOpen, activeSection } = this.state;
+	handleSectionChange(event, newValue) {
+		this.setState({ activeSection: newValue })
+	}
 
-    return (
-      <>
-        <Start onClick={() => this.handleDrawer(true)} />
-        <Drawer
-          anchor="bottom"
-          PaperProps={{
-            style: {
-              maxHeight: "90vh"
-            }
-          }}
-          open={drawerOpen}
-          onClose={() => this.handleDrawer(false)}
-        >
-          <Section
-            {...sections[activeSection]}
-            onChooseTag={() => this.handleDrawer(false)}
-          />
-          <Paper
-            elevation={6}
-            style={{
-              position: "sticky",
-              bottom: 0,
-              left: 0,
-              right: 0
-            }}
-          >
-            <BottomNavigation
-              showLabels
-              value={activeSection}
-              onChange={this.handleSectionChange.bind(this)}
-            >
-              {navigation.map(section => (
-                <BottomNavigationAction
-                  key={section.id}
-                  label={section.title}
-                  value={section.id}
-                  icon={section.icon}
-                />
-              ))}
-            </BottomNavigation>
-          </Paper>
-        </Drawer>
-      </>
-    );
-  }
+	render() {
+		const { navigation, sections, drawerOpen, activeSection } = this.state
+
+		return (
+			<>
+				<Start onClick={() => this.handleDrawer(true)} />
+				<Drawer
+					anchor="bottom"
+					PaperProps={{
+						style: {
+							maxHeight: "90vh",
+						},
+					}}
+					open={drawerOpen}
+					onClose={() => this.handleDrawer(false)}
+				>
+					<Section
+						{...sections[activeSection]}
+						onChooseTag={() => this.handleDrawer(false)}
+					/>
+					<Paper
+						elevation={6}
+						style={{
+							position: "sticky",
+							bottom: 0,
+							left: 0,
+							right: 0,
+						}}
+					>
+						<BottomNavigation
+							showLabels
+							value={activeSection}
+							onChange={this.handleSectionChange.bind(this)}
+						>
+							{navigation.map(section => (
+								<BottomNavigationAction
+									key={section.id}
+									label={section.title}
+									value={section.id}
+									icon={section.icon}
+								/>
+							))}
+						</BottomNavigation>
+					</Paper>
+				</Drawer>
+			</>
+		)
+	}
 }
