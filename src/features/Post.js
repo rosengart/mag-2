@@ -40,7 +40,7 @@ class Picture extends React.Component {
     };
   }
 
-  componentDidMount(props) {
+  componentDidMount() {
     storageBucket
       .child(`media/${this.state.reference}`)
       .getDownloadURL()
@@ -50,10 +50,10 @@ class Picture extends React.Component {
   }
 
   render() {
-    const { url } = this.state;
+    const { reference, url } = this.state;
     return (
       <div>
-        <img src={url} />
+        <img src={url} alt={reference} />
       </div>
     );
   }
@@ -64,7 +64,13 @@ function Tag(props) {
   const { label } = props;
 
   return (
-    <Chip component={Link} to={`/tags/${label}`} size="small" label={label} />
+    <Chip
+      clickable
+      component={Link}
+      to={`/tags/${label}`}
+      size="small"
+      label={label}
+    />
   );
 }
 

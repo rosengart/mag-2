@@ -41,6 +41,7 @@ function LoginDialog(props) {
           // autoFocus
           label="Email"
           type="email"
+          name="email"
           fullWidth
           value={email}
           onChange={handleEmail}
@@ -50,6 +51,7 @@ function LoginDialog(props) {
           margin="normal"
           label="Senha"
           type="password"
+          name="password"
           fullWidth
           value={password}
           onChange={handlePassword}

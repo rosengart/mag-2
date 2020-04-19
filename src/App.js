@@ -3,9 +3,6 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link,
-  Redirect,
-  useHistory,
   useLocation
 } from "react-router-dom";
 
@@ -47,13 +44,23 @@ theme.overrides = {
   }
 };
 
+function ScrollToTop() {
+  const { pathname } = useLocation();
+
+  React.useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
+  return null;
+}
+
 export default class App extends React.Component {
   constructor() {
     super();
     this.state = {
       user: {},
       signedIn: false,
-      navigationOpen: false
+      navigationOpen: true
     };
   }
 
@@ -77,22 +84,21 @@ export default class App extends React.Component {
   }
 
   render() {
-    const { user, signedIn, navigationOpen } = this.state;
+    const { signedIn, navigationOpen } = this.state;
 
     return (
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <Router>
           <div className="app">
+            <ScrollToTop />
             {signedIn && <Appbar authProvider={auth} />}
             {signedIn && <Navigation open={navigationOpen} />}
 
             {!signedIn && <Login authProvider={auth} />}
 
             <Switch>
-              <Route exact path="/">
-                Vazio
-              </Route>
+              <Route exact path="/" />
               <Route path="/tags/:tag" render={props => <Tag {...props} />} />
             </Switch>
           </div>

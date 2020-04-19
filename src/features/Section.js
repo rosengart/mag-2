@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 
 import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
+import pink from "@material-ui/core/colors/pink";
 
 import firebase from "./../firebase";
 const storage = firebase.storage();
@@ -17,11 +18,13 @@ const useStyles = makeStyles(theme => ({
     padding: theme.spacing(1)
   },
   groupTitle: {
-    padding: theme.spacing(2, 1, 1)
+    padding: theme.spacing(2, 1, 1),
+    fontSize: 24,
+    color: pink[700]
   },
   groupGrid: {
     display: "grid",
-    gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))",
+    gridTemplateColumns: "repeat(auto-fill, minmax(150px, 1fr))",
     gridGap: theme.spacing(1)
   },
 

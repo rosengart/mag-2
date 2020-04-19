@@ -1,6 +1,7 @@
 import React from "react";
 
 import { makeStyles } from "@material-ui/core/styles";
+import Button from "@material-ui/core/Button";
 
 import Post from "./Post";
 
@@ -19,31 +20,66 @@ class Gallery extends React.Component {
     super(props);
     this.state = {
       tag: props.tag,
-      posts: []
+      posts: [],
+      lastPostId: 0
     };
   }
 
-  // componentDidMount(props) {
+  loadPosts() {
+    const lastPostId = this.state.lastPostId;
+
+    return db
+      .collection("posts")
+      .where("tags", "array-contains", tag)
+      .startAfter(lastPostId)
+      .limit(15)
+      .get();
+  }
+
   componentDidUpdate(props) {
     const tag = props.tag;
-    const posts = [];
+    const posts = this.state.posts;
+    let lastPostId = this.state.lastPostId;
+
     db.collection("posts")
       .where("tags", "array-contains", tag)
-      .limit(10)
+      .limit(15)
       .get()
       .then(snapshot => {
         snapshot.forEach(post => {
           const postData = post.data();
           postData.id = post.id;
+          lastPostId = post.id;
 
           posts.push(postData);
         });
 
         this.setState({
           tag: tag,
-          posts: posts
+          posts: posts,
+          lastPostId: lastPostId
         });
       });
+  }
+
+  handleShowMore() {
+    this.loadPosts().then(snapshot => {
+      const posts = this.state.posts;
+      let lastPostId = null;
+
+      snapshot.forEach(post => {
+        const postData = post.data();
+        postData.id = post.id;
+        lastPostId = post.id;
+
+        posts.push(postData);
+      });
+
+      this.setState({
+        posts: posts,
+        lastPostId: lastPostId
+      });
+    });
   }
 
   render(props) {
@@ -54,6 +90,9 @@ class Gallery extends React.Component {
         {posts.map(post => (
           <Post key={post.id} {...post} />
         ))}
+        <div style={{ textAlign: "center" }}>
+          <Button onClick={this.handleShowMore}>Mostrar mais</Button>
+        </div>
       </div>
     );
   }
