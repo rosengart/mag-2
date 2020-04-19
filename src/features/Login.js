@@ -5,12 +5,6 @@ import TextField from "@material-ui/core/TextField";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
-import DialogTitle from "@material-ui/core/DialogTitle";
-
-// import firebaseui from "firebaseui"
-
-// const  ui = new firebaseui.auth.AuthUI(firebase.auth())
 
 function LoginDialog(props) {
   const auth = props.authProvider;
@@ -66,17 +60,6 @@ function LoginDialog(props) {
   );
 }
 
-export default class Login extends React.Component {
-  componentDidMount() {
-    // const uiConfig = {
-    //   signInFlow: "popup",
-    //   signInSuccessUrl: "/tags",
-    //   signInOptions: [ firebase.auth.EmailAuthProvider.PROVIDER_ID ],
-    // }
-    // ui.start("#firebaseui-auth-container", uiConfig)
-  }
-
-  render(props) {
-    return <LoginDialog authProvider={this.props.authProvider} />;
-  }
+export default function Login() {
+  return <LoginDialog authProvider={this.props.authProvider} />;
 }

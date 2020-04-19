@@ -66,7 +66,7 @@ export default class App extends React.Component {
 
   componentDidMount() {
     auth.onAuthStateChanged(user => {
-      console.log("onAuthStateChanged", user);
+      // console.log("onAuthStateChanged", user);
       if (user) {
         this.setState({
           user: user,
