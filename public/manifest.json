@@ -1,17 +1,17 @@
 {
-  "name": "Shirtless",
-  "short_name": "Shirtless",
-  "theme_color": "#880e4f",
-  "background_color": "#fff",
-  "display": "standalone",
-  "scope": "/",
-  "start_url": "/",
-  "icons": [
-    {
-      "src": "/favicon.png",
-      "sizes": "256x256",
-      "type": "image/png"
-    }
-  ],
-  "splash_pages": null
+	"name": "Shirtless",
+	"short_name": "Shirtless",
+	"theme_color": "#880e4f",
+	"background_color": "#fff",
+	"display": "standalone",
+	"scope": "/",
+	"start_url": "/",
+	"icons": [
+		{
+			"src": "/icon.png",
+			"sizes": "256x256",
+			"type": "image/png"
+		}
+	],
+	"splash_pages": null
 }
