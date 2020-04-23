@@ -84,8 +84,8 @@ class Picture extends React.Component {
 						left: 0,
 						right: 0,
 						backgroundImage: `url('${url}')`,
-						backgroundSize: size || "cover",
-						backgroundPosition: position || "center",
+						backgroundSize: size || "100%",
+						backgroundPosition: position || "50% 50%",
 					}}
 				/>
 			)
