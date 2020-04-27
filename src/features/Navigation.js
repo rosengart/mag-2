@@ -57,9 +57,22 @@ export default class Navigation extends React.Component {
 					order: sectionData.order,
 				})
 
+				// Ordena grupos
+				if (sectionData.groups) {
+					sectionData.groups.sort((a, b) => (a.order > b.order ? 1 : -1))
+
+					// Ordena tags
+					sectionData.groups.forEach(group => {
+						if (group.tags) {
+							group.tags.sort((a, b) => (a.order > b.order ? 1 : -1))
+						}
+					})
+				}
+
 				sections[sectionId] = sectionData
 			})
 
+			// Ordena seções
 			navigation.sort((a, b) => (a.order > b.order ? 1 : -1))
 
 			this.setState({
@@ -67,7 +80,7 @@ export default class Navigation extends React.Component {
 				sections: sections,
 			})
 
-			if (this.state.activeSession === null) {
+			if (this.state.activeSection === null) {
 				this.setState({
 					activeSection: navigation[0].id,
 				})
