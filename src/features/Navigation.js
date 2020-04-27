@@ -65,8 +65,13 @@ export default class Navigation extends React.Component {
 			this.setState({
 				navigation: navigation,
 				sections: sections,
-				activeSection: navigation[0].id,
 			})
+
+			if (this.state.activeSession === null) {
+				this.setState({
+					activeSection: navigation[0].id,
+				})
+			}
 		})
 	}
 
